@@ -2,19 +2,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kube-system
+  name: kube-state-metrics
   namespace: argocd
 spec:
   project: default
   sources:
-    - chart: kube-system
+    - chart: kube-state-metrics
       repoURL: https://prometheus-community.github.io/helm-charts
       targetRevision: 5.10.1
       helm:
-        releaseName: kube-system
+        releaseName: kube-state-metrics
         valueFiles:
         - $values/release/values.yaml
-    - repoURL: https://github.com/IanHewlett/demo-platform-service-kube-system.git
+    - repoURL: https://github.com/IanHewlett/demo-platform-service-kube-state-metrics.git
       targetRevision: main
       ref: values
   destination:
