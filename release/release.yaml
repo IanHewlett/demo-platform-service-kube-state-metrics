@@ -1,0 +1,26 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-system
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - chart: kube-system
+      repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 5.10.1
+      helm:
+        releaseName: kube-system
+        valueFiles:
+        - $values/release/values.yaml
+    - repoURL: https://github.com/IanHewlett/demo-platform-service-kube-system.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
