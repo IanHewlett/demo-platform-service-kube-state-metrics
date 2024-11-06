@@ -5,8 +5,10 @@ resources:
   limits:
     cpu: 100m
     memory: 256Mi
+
 nodeSelector:
   nodegroup: "management-nodes"
+
 tolerations:
   - key: "dedicated"
     operator: "Equal"
