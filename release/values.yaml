@@ -1,5 +1,15 @@
 replicas: 1
 
+updateStrategy:
+  rollingUpdates:
+    maxSurge: 0
+    maxUnavailable: 1
+  type: RollingUpdate
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 10%
+
 resources:
   requests:
     cpu: 100m
@@ -16,3 +26,22 @@ tolerations:
     operator: "Equal"
     value: "management"
     effect: "NoSchedule"
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - kube-state-metrics
+        topologyKey: kubernetes.io/hostname
+
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          topologyKey: failure-domain.beta.kubernetes.io/zone
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: kube-state-metrics
